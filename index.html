@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026학년도 자연과학대학 학술발표대회 - 발표자 확인</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+        }
+        h2 { color: #1a365d; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 30px; }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background-color: #003366; }
+        .error-msg { color: #e53e3e; font-size: 13px; margin-top: 10px; display: none; }
+        
+        #dashboard { display: none; text-align: left; }
+        .info-box { background: #eef2f7; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; }
+        
+        .schedule-list {
+            margin-top: 6px;
+            padding-left: 0;
+            list-style: none;
+        }
+        .schedule-item {
+            display: flex;
+            margin-bottom: 4px;
+        }
+        .schedule-time {
+            min-width: 165px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .schedule-desc {
+            color: #4a5568;
+        }
+
+        .highlight { color: #c53030; font-weight: bold; }
+        #loading { display: none; margin-top: 10px; color: #004080; font-weight: bold; font-size: 14px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 로그인 영역 -->
+    <div id="login-section">
+        <h2>발표자 확인</h2>
+        <p>2026학년도 자연과학대학 학술발표대회<br>성함을 입력해주세요.</p>
+        
+        <div class="input-group">
+            <label for="nameInput">성함</label>
+            <input type="text" id="nameInput" placeholder="강원철" autocomplete="off" required>
+        </div>
+        <button id="loginBtn" onclick="checkUser()">확인 및 입장</button>
+        <div id="errorMsg" class="error-msg">등록되지 않은 성함입니다. 다시 확인해주세요.</div>
+    </div>
+
+    <!-- 로그인 성공 후 나타나는 발표자 전용 페이지 영역 -->
+    <div id="dashboard">
+        <h2>환영합니다, <span id="userNameDisplay"></span> (<span id="userDeptDisplay"></span>)님</h2>
+        <div class="info-box">
+            <strong>[행사 안내]</strong><br>
+            - 일시: 2026년 10월 30일(금) 11:00 ~ 14:00<br>
+            - 장소: 한경직기념관 김덕윤예배실<br>
+            - 행사 일정:
+            <ul class="schedule-list">
+                <li class="schedule-item">
+                    <span class="schedule-time">11:00 – 11:30</span>
+                    <span class="schedule-desc">: 등록 및 포스터 부착</span>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-time">11:30 – 13:00 (90분)</span>
+                    <span class="schedule-desc">: 포스터 발표 및 심사</span>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-time">13:00 – 13:10</span>
+                    <span class="schedule-desc">: 심사표 취합 및 우수포스터상 선정</span>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-time">13:10 – 13:30</span>
+                    <span class="schedule-desc">: 우수 포스터 시상 및 단체 사진 촬영</span>
+                </li>
+                <li class="schedule-item">
+                    <span class="schedule-time">13:30 – 14:00</span>
+                    <span class="schedule-desc">: 포스터 철거</span>
+                </li>
+            </ul>
+        </div>
+
+        <h3>포스터 제작 및 제출 안내</h3>
+        <ul style="font-size: 14px; color: #444; padding-left: 15px; line-height: 1.6; margin-bottom: 20px;">
+            <li><strong>디자인 규격:</strong> 패널 크기: 1,000 × 1,800 mm (세로형)</li>
+            <li><strong>권장 포스터 크기:</strong> A0 또는 900 × 1,200 mm</li>
+            <li><strong>숭실대학교 로고 포함</strong></li>
+            <li><span class="highlight">파일 형식: PDF 파일만 업로드 가능합니다.</span></li>
+        </ul>
+        
+        <div class="input-group">
+            <label for="posterFile">포스터 PDF 파일 선택</label>
+            <input type="file" id="posterFile" accept="application/pdf">
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button id="submitBtn" style="background-color: #2f855a;" onclick="uploadFile()">구글 드라이브로 바로 제출하기</button>
+            <div id="loading">처리 중입니다. 잠시만 기다려주세요...</div>
+        </div>
+
+        <div style="margin-top: 15px; text-align: center;">
+            <a href="#" onclick="location.reload()" style="font-size: 13px; color: #666; text-decoration: underline;">처음으로 돌아가기</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ★ 여기에 Google Apps Script 웹 앱 URL을 입력하세요.
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxCE9C_MIADdNKmPrphdf1qDEWbex8_N4MbQjVIgHf8dGWWoNd9hxQOwsAfmtYv89kZJg/exec";
+
+    let currentUserName = "";
+    let currentUserDept = "";
+
+    // 1. 서버에 이름 인증 요청
+    function checkUser() {
+        const inputName = document.getElementById('nameInput').value.trim();
+        const errorDiv = document.getElementById('errorMsg');
+        const loginBtn = document.getElementById('loginBtn');
+
+        if (!inputName) {
+            errorDiv.style.display = 'block';
+            errorDiv.innerText = '성함을 입력해주세요.';
+            return;
+        }
+
+        errorDiv.style.display = 'none';
+        loginBtn.disabled = true;
+
+        fetch(GAS_URL, {
+            method: 'POST',
+            body: JSON.stringify({ userName: inputName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loginBtn.disabled = false;
+            if (data.status === 'success') {
+                currentUserName = inputName;
+                currentUserDept = data.dept;
+                
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('userNameDisplay').innerText = currentUserName;
+                document.getElementById('userDeptDisplay').innerText = currentUserDept;
+            } else {
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = '등록되지 않은 성함입니다. 다시 확인해주세요.';
+            }
+        })
+        .catch(error => {
+            loginBtn.disabled = false;
+            errorDiv.style.display = 'block';
+            errorDiv.innerText = '서버 통신 중 오류가 발생했습니다.';
+            console.error(error);
+        });
+    }
+
+    // 2. 서버에 파일 업로드 요청
+    function uploadFile() {
+        const fileInput = document.getElementById('posterFile');
+        const loadingDiv = document.getElementById('loading');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (fileInput.files.length === 0) {
+            alert('업로드할 PDF 파일을 선택해주세요.');
+            return;
+        }
+
+        const file = fileInput.files[0];
+
+        if (file.type !== "application/pdf") {
+            alert('PDF 파일만 업로드할 수 있습니다.');
+            return;
+        }
+
+        loadingDiv.style.display = 'block';
+        submitBtn.disabled = true;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            const base64Data = reader.result.split(',')[1];
+
+            const payload = {
+                userName: currentUserName,
+                fileName: file.name,
+                mimeType: file.type,
+                fileData: base64Data
+            };
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingDiv.style.display = 'none';
+                submitBtn.disabled = false;
+                if (data.status === 'success') {
+                    alert('포스터 파일이 성공적으로 제출되었습니다!');
+                    fileInput.value = '';
+                } else {
+                    alert('업로드 실패: ' + data.message);
+                }
+            })
+            .catch(error => {
+                loadingDiv.style.display = 'none';
+                submitBtn.disabled = false;
+                alert('업로드 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                console.error(error);
+            });
+        };
+        reader.onerror = function () {
+            loadingDiv.style.display = 'none';
+            submitBtn.disabled = false;
+            alert('파일을 읽는 중 오류가 발생했습니다.');
+        };
+    }
+</script>
+
+</body>
+</html>
