@@ -53,11 +53,9 @@
         button:hover { background-color: #003366; }
         .error-msg { color: #e53e3e; font-size: 13px; margin-top: 10px; display: none; }
         
-        /* 발표자 전용 대시보드 영역 */
         #dashboard { display: none; text-align: left; }
         .info-box { background: #eef2f7; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; }
         
-        /* 일정 줄맞춤 스타일 */
         .schedule-list {
             margin-top: 6px;
             padding-left: 0;
@@ -90,8 +88,7 @@
         
         <div class="input-group">
             <label for="nameInput">성함</label>
-            <!-- value를 제거하여 빈칸으로 시작하며, placeholder로 예시만 제공합니다 -->
-            <input type="text" id="nameInput" placeholder="예: 숭실" autocomplete="off" required>
+            <input type="text" id="nameInput" placeholder="숭실대학교" autocomplete="off" required>
         </div>
         <button id="loginBtn" onclick="checkUser()">확인 및 입장</button>
         <div id="errorMsg" class="error-msg">등록되지 않은 성함입니다. 다시 확인해주세요.</div>
@@ -155,7 +152,7 @@
 
 <script>
     // ★ 여기에 Google Apps Script 웹 앱 URL을 입력하세요.
-    const GAS_URL = "여기에_웹앱_URL을_입력하세요";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw_yVgVFI_QB7moZRPn4F9dUZ6rXKG9gbxQ5NFEkte30Md-1PxCSvU7bYFkWwis8u7TSA/exec";
 
     let currentUserName = "";
     let currentUserDept = "";
