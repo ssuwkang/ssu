@@ -152,7 +152,7 @@
 
 <script>
     // ★ 여기에 Google Apps Script 웹 앱 URL을 입력하세요.
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxCVVpxAqWvkRu75erm5GmjbTWENnjJytSfnxU8SyloUbUJp5NnSy-nXGyugVjPGkzwTA/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSHnxMLRdJmyNCpCkFZC0RuJLGgnVfZgiE_Dm1ETD3gR3fvc5vuSg3QQ5dxIY1K8EZcQ/exec";
 
     let currentUserName = "";
     let currentUserDept = "";
@@ -201,7 +201,7 @@
     }
 
     // 2. 서버에 파일 업로드 요청
-    function uploadFile() {
+function uploadFile() {
         const fileInput = document.getElementById('posterFile');
         const loadingDiv = document.getElementById('loading');
         const submitBtn = document.getElementById('submitBtn');
@@ -218,6 +218,16 @@
             return;
         }
 
+        // 현재 시각을 YYYYMMDDHHMMSS 형식으로 생성
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
         loadingDiv.style.display = 'block';
         submitBtn.disabled = true;
 
@@ -229,6 +239,7 @@
             const payload = {
                 userName: currentUserName,
                 userDept: currentUserDept,
+                timestamp: timestamp,  // 시간 정보 추가 전송
                 fileName: file.name,
                 mimeType: file.type,
                 fileData: base64Data
