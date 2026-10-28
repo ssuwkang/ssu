@@ -9,7 +9,7 @@
             font-family: 'Malgun Gothic', sans-serif;
             background-color: #f4f6f9;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,15 +17,15 @@
         }
         .container {
             background: #ffffff;
-            padding: 40px;
+            padding: 30px 40px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 520px;
+            max-width: 600px;
             text-align: center;
         }
         h2 { color: #1a365d; margin-bottom: 10px; }
-        p { color: #666; font-size: 14px; margin-bottom: 30px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
         .input-group {
             margin-bottom: 20px;
             text-align: left;
@@ -55,7 +55,7 @@
         
         /* 결과 대시보드 영역 */
         #result-section { display: none; text-align: left; }
-        .info-box { background: #eef2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; font-size: 15px; line-height: 1.8; }
+        .info-box { background: #eef2f7; padding: 15px 20px; border-radius: 6px; margin-bottom: 15px; font-size: 15px; line-height: 1.6; }
         .highlight-badge { 
             display: inline-block; 
             background-color: #2b6cb0; 
@@ -70,7 +70,48 @@
         .detail-label { width: 90px; color: #4a5568; font-weight: bold; }
         .detail-value { color: #2d3748; font-weight: bold; }
 
-        .notice-box { font-size: 13px; color: #555; background: #fffaf0; border: 1px solid #feebc8; padding: 12px; border-radius: 4px; line-height: 1.5; margin-bottom: 20px; }
+        .notice-box { font-size: 13px; color: #555; background: #fffaf0; border: 1px solid #feebc8; padding: 12px; border-radius: 4px; line-height: 1.5; margin-bottom: 15px; }
+        
+        /* 배치도 스타일 */
+        .layout-map-box {
+            background: #f0f4f8;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        .layout-title {
+            font-weight: bold;
+            color: #1a365d;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid #cbd5e0;
+            padding-bottom: 6px;
+        }
+        .layout-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+        .layout-col {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 8px 4px;
+        }
+        .layout-col-title {
+            font-weight: bold;
+            color: #2b6cb0;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+        .layout-col-desc {
+            color: #4a5568;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +133,7 @@
     <!-- 결과 확인 영역 -->
     <div id="result-section">
         <h2>조회 결과</h2>
-        <div style="text-align: center; margin-bottom: 15px;">
+        <div style="text-align: center; margin-bottom: 10px;">
             <div id="posterNoDisplay" class="highlight-badge">P-00</div>
         </div>
         
@@ -115,7 +156,31 @@
             <strong>[행사 안내]</strong><br>
             - 일시: 2026년 10월 30일(금) 11:00 ~ 14:00<br>
             - 장소: 한경직기념관 김덕윤예배실<br>
-            - 11:00 ~ 11:30까지 지정된 번호 부스에 포스터를 부착해 주시기 바랍니다.
+            - 11:00 ~ 11:30까지 지정된 번호 부스에 포스터를 부착해 주시기 바랍니다.<br>
+            - 유고결석 신청을 위한 발표확인서 요청은 강원철교수에게 메일을 보내주시기 바랍니다. (wonchullkang@ssu.ac.kr)
+        </div>
+
+        <!-- 김덕윤예배실 전면 보드판 배치도 추가 -->
+        <div class="layout-map-box">
+            <div class="layout-title">📍 김덕윤예배실 전면 포스터 배치 안내</div>
+            <div class="layout-grid">
+                <div class="layout-col">
+                    <div class="layout-col-title">1열</div>
+                    <div class="layout-col-desc">P-01 ~ P-14</div>
+                </div>
+                <div class="layout-col">
+                    <div class="layout-col-title">2열</div>
+                    <div class="layout-col-desc">P-15 ~ P-28</div>
+                </div>
+                <div class="layout-col">
+                    <div class="layout-col-title">3열</div>
+                    <div class="layout-col-desc">P-29 ~ P-42</div>
+                </div>
+                <div class="layout-col">
+                    <div class="layout-col-title">4열</div>
+                    <div class="layout-col-desc">P-43 ~ P-55</div>
+                </div>
+            </div>
         </div>
 
         <div style="text-align: center;">
@@ -125,7 +190,7 @@
 </div>
 
 <script>
-    // ★ 여기에 Google Apps Script 웹 앱 URL을 입력하세요.
+    // ★ Google Apps Script 웹 앱 URL
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwvGOBgjs0SA7M4Zl65NHSQzVM2ePtVF_BsOVBo9-Xxsgv0AJ3H5svfdG6dVxow40c0GQ/exec";
 
     function searchPoster() {
