@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026학년도 자연과학대학 학술발표대회 - 포스터 번호 조회</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+        }
+        h2 { color: #1a365d; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 30px; }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background-color: #003366; }
+        .error-msg { color: #e53e3e; font-size: 13px; margin-top: 10px; display: none; }
+        
+        /* 결과 대시보드 영역 */
+        #result-section { display: none; text-align: left; }
+        .info-box { background: #eef2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; font-size: 15px; line-height: 1.8; }
+        .highlight-badge { 
+            display: inline-block; 
+            background-color: #2b6cb0; 
+            color: white; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-weight: bold; 
+            font-size: 18px; 
+            margin-bottom: 10px;
+        }
+        .detail-row { display: flex; margin-bottom: 6px; }
+        .detail-label { width: 90px; color: #4a5568; font-weight: bold; }
+        .detail-value { color: #2d3748; font-weight: bold; }
+
+        .notice-box { font-size: 13px; color: #555; background: #fffaf0; border: 1px solid #feebc8; padding: 12px; border-radius: 4px; line-height: 1.5; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 조회 입력 영역 -->
+    <div id="search-section">
+        <h2>포스터 발표 번호 조회</h2>
+        <p>2026학년도 자연과학대학 학술발표대회<br>성함을 입력하시면 배정된 포스터 번호를 확인하실 수 있습니다.</p>
+        
+        <div class="input-group">
+            <label for="nameInput">성함</label>
+            <input type="text" id="nameInput" placeholder="예: 김숭실" autocomplete="off" required>
+        </div>
+        <button id="searchBtn" onclick="searchPoster()">포스터 번호 확인</button>
+        <div id="errorMsg" class="error-msg">등록되지 않은 성함입니다. 다시 확인해주세요.</div>
+    </div>
+
+    <!-- 결과 확인 영역 -->
+    <div id="result-section">
+        <h2>조회 결과</h2>
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div id="posterNoDisplay" class="highlight-badge">P-00</div>
+        </div>
+        
+        <div class="info-box">
+            <div class="detail-row">
+                <span class="detail-label">성 함:</span>
+                <span class="detail-value" id="nameDisplay"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">소 속:</span>
+                <span class="detail-value" id="deptDisplay"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">학 번:</span>
+                <span class="detail-value" id="studentIdDisplay"></span>
+            </div>
+        </div>
+
+        <div class="notice-box">
+            <strong>[행사 안내]</strong><br>
+            - 일시: 2026년 10월 30일(금) 11:00 ~ 14:00<br>
+            - 장소: 한경직기념관 김덕윤예배실<br>
+            - 11:00 ~ 11:30까지 지정된 번호 부스에 포스터를 부착해 주시기 바랍니다.
+        </div>
+
+        <div style="text-align: center;">
+            <button style="background-color: #4a5568; max-width: 200px;" onclick="location.reload()">다른 이름으로 조회하기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ★ 여기에 Google Apps Script 웹 앱 URL을 입력하세요.
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwvGOBgjs0SA7M4Zl65NHSQzVM2ePtVF_BsOVBo9-Xxsgv0AJ3H5svfdG6dVxow40c0GQ/exec";
+
+    function searchPoster() {
+        const inputName = document.getElementById('nameInput').value.trim();
+        const errorDiv = document.getElementById('errorMsg');
+        const searchBtn = document.getElementById('searchBtn');
+
+        if (!inputName) {
+            errorDiv.style.display = 'block';
+            errorDiv.innerText = '성함을 입력해주세요.';
+            return;
+        }
+
+        errorDiv.style.display = 'none';
+        searchBtn.disabled = true;
+
+        fetch(GAS_URL, {
+            method: 'POST',
+            body: JSON.stringify({ userName: inputName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            searchBtn.disabled = false;
+            if (data.status === 'success') {
+                document.getElementById('search-section').style.display = 'none';
+                document.getElementById('result-section').style.display = 'block';
+                
+                document.getElementById('posterNoDisplay').innerText = data.posterNo;
+                document.getElementById('nameDisplay').innerText = data.name;
+                document.getElementById('deptDisplay').innerText = data.dept;
+                document.getElementById('studentIdDisplay').innerText = data.studentId;
+            } else {
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = data.message || '등록되지 않은 성함입니다.';
+            }
+        })
+        .catch(error => {
+            searchBtn.disabled = false;
+            errorDiv.style.display = 'block';
+            errorDiv.innerText = '서버 통신 중 오류가 발생했습니다.';
+            console.error(error);
+        });
+    }
+
+    // 엔터키 입력 시 조회 실행
+    document.getElementById('nameInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchPoster();
+        }
+    });
+</script>
+
+</body>
+</html>
